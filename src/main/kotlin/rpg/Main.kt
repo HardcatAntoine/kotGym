@@ -1,4 +1,6 @@
 package rpg
 
-class Main {
+fun main() {
+    println("Welcome! Do you want to start?")
+    InputHelper.captureInput()
 }
