@@ -1,7 +1,9 @@
 package rpg
 
+import rpg.experimental.ExperimentalInputHelper
+
 fun main() {
-    println("Test string") // Test string should be deleted
     println("Welcome! Do you want to start?")
-    InputHelper.captureInput()
+//    InputHelper.captureInput()
+    ExperimentalInputHelper.captureInput()
 }
