@@ -1,7 +1,5 @@
 package rpg.experimental
 
-import rpg.Room
-
 object MatrixNavigator {
     private const val size = 6
     private var map = MatrixMapGenerator.generateMap(size)
@@ -39,14 +37,11 @@ object MatrixNavigator {
 
         val result = ArrayList<Int>()
 
-        val xFirstBound = if (row > 0) -1 else 0
-        val xSecondBound = if (row < rowCount - 1) 1 else 0
+        val rowBounds = ((if (row > 0) -1 else 0)..if (row < rowCount - 1) 1 else 0)
+        val columnBounds = ((if (column > 0) -1 else 0)..(if (column < columnCount - 1) 1 else 0))
 
-        val yFirstBound = if (column > 0) -1 else 0
-        val ySecondBound = if (column < columnCount - 1) 1 else 0
-
-        for (rowStep in xFirstBound..xSecondBound) {
-            for (columnStep in yFirstBound..ySecondBound) {
+        for (rowStep in rowBounds) {
+            for (columnStep in columnBounds) {
                 if (rowStep != 0 || columnStep != 0) {
                     result.add(matrix[row + rowStep][column + columnStep])
                 }
