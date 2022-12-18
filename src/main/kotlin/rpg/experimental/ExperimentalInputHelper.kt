@@ -22,6 +22,8 @@ object ExperimentalInputHelper {
                 }
                 input.hasCommand() -> {
                     if (RoomNavigator.currentRoom() != null) handleGameCommands(input) else handleMenuCommands(input)
+                    // For 2D map
+//                    if (MatrixNavigator.getCurrentPos() != null) handleGameCommands(input) else handleMenuCommands(input)
                 }
                 else -> {
                     failedInputs++
@@ -34,6 +36,9 @@ object ExperimentalInputHelper {
         if (failedInputs % 6 == 0) println(MessageStorage.getHint())
     }
 
+    /**
+     * For one dimensional map presentation
+     */
     private fun handleMenuCommands(input: String) {
         when {
             input.isPositiveCommand() -> RoomNavigator.nextRoom()
@@ -51,4 +56,25 @@ object ExperimentalInputHelper {
             else -> failedInputs++
         }
     }
+
+    /**
+     * For two dimensional map presentation
+     */
+//    private fun handleMenuCommands(input: String) {
+//        when {
+//            input.isPositiveCommand() -> MatrixNavigator.nextMap(5)
+//            input.isNegativeCommand() -> println("That's not an option... You must try it...")
+//            else -> failedInputs++
+//        }
+//    }
+//
+//    private fun handleGameCommands(input: String) {
+//        when (input) {
+//            "up" -> MatrixNavigator.goUp()
+//            "down" -> MatrixNavigator.goDown()
+//            "left" -> MatrixNavigator.goLeft()
+//            "right" -> MatrixNavigator.goRight()
+//            else -> failedInputs++
+//        }
+//    }
 }

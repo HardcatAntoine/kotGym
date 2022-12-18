@@ -3,26 +3,40 @@ package rpg.experimental
 import rpg.Room
 import kotlin.random.Random
 
-object MatrixMapGenerator {
-    fun generateMap(mapSize: Int): Array<Array<Room>> {
-        val roomsCount = mapSize * mapSize
-        var roomsCounter = 0
-        val exit = Random.nextInt(roomsCount / 2, roomsCount)
-        val start = Random.nextInt(1, roomsCount / 2)
+class MatrixMapGenerator(
+    private val mapSize: Int,
+) {
+    private val roomsCount = mapSize * mapSize
+    private var roomsCounter = 0
+    private val exitNumber = Random.nextInt(1, roomsCount / 2)
+    private val startNumber = Random.nextInt(roomsCount / 2, roomsCount)
+    private var currentPos: Pair<Int, Int>? = null
+    private lateinit var exitPos: Pair<Int, Int>
 
-        println("EXIT: $exit | START: $start | ROOMS: ${mapSize * mapSize}")
-        return Array(mapSize) {
-            Array(mapSize) {
+    fun getCurrentPos() = currentPos
+
+    fun setCurrentPos(position: Pair<Int, Int>) {
+        currentPos = position
+    }
+
+    fun getExitPos() = exitPos
+
+    fun generateMap(): Array<Array<Pair<RoomPosition, Room>>> {
+        println("EXIT: $exitNumber | START: $startNumber | ROOMS: ${mapSize * mapSize}")
+        return Array(mapSize) { row ->
+            Array(mapSize) { column ->
                 roomsCounter++
                 when (roomsCounter) {
-                    exit -> {
-                        Room(isExit = true)
+                    exitNumber -> {
+                        exitPos = (row to column)
+                        (RoomPosition(row, column, roomsCounter) to Room(isExit = true))
                     }
-                    start -> {
-                        Room(isHere = true)
+                    startNumber -> {
+                        currentPos = (row to column)
+                        (RoomPosition(row, column, roomsCounter) to Room(isHere = true))
                     }
                     else -> {
-                        Room()
+                        (RoomPosition(row, column, roomsCounter) to Room())
                     }
                 }
             }

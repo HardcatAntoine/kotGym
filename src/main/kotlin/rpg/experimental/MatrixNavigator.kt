@@ -1,32 +1,49 @@
 package rpg.experimental
 
-object MatrixNavigator {
-    private const val size = 6
-    private var map = MatrixMapGenerator.generateMap(size)
+import rpg.Room
 
-    fun printMap() {
-        map.forEach { columns ->
+object MatrixNavigator {
+    private var generator = MatrixMapGenerator(3)
+    private var map: Array<Array<Pair<RoomPosition, Room>>>? = null
+    fun getMap() = map
+
+    fun getGenerator() = generator
+
+    fun getCurrentPos() = generator.getCurrentPos()
+
+    fun setCurrentPos(position: Pair<Int, Int>) {
+        generator.setCurrentPos(position)
+    }
+
+    fun nextMap(size: Int) {
+        generator = MatrixMapGenerator(size)
+        map = generator.generateMap()
+        printMap()
+    }
+
+    private fun printMap() {
+        map!!.forEach { columns ->
             print("+")
-            println("---+".repeat(size))
+            println("---+".repeat(map!!.size))
             print("|")
-            columns.forEach { room ->
+            columns.forEach { element ->
                 when {
-                    room.isHere() -> print(" @ |")
-                    room.isExit() -> print(" X |")
+                    element.second.isHere() -> print(" @ |")
+                    element.second.isExit() -> print(" X |")
                     else -> print("   |")
                 }
             }
             println()
         }
         print("+")
-        println("---+".repeat(size))
+        println("---+".repeat(map!!.size))
     }
 
-    fun getAdjacent(
-        matrix: Array<IntArray>,
+    fun <T : Any> getAdjacent(
+        matrix: Array<Array<T>>,
         row: Int,
         column: Int,
-    ): List<Int> {
+    ): List<T> {
         val rowCount = matrix.size
         val columnCount = matrix[0].size
 
@@ -35,7 +52,7 @@ object MatrixNavigator {
             return emptyList()
         }
 
-        val result = ArrayList<Int>()
+        val result = ArrayList<T>()
 
         val rowBounds = ((if (row > 0) -1 else 0)..if (row < rowCount - 1) 1 else 0)
         val columnBounds = ((if (column > 0) -1 else 0)..(if (column < columnCount - 1) 1 else 0))
@@ -49,5 +66,81 @@ object MatrixNavigator {
         }
 
         return result
+    }
+
+    fun goUp() {
+        val currentPos = getCurrentPos()
+        val currentRow = currentPos!!.first
+        val currentColumn = currentPos.second
+        val nextRow: Int
+        if (currentRow >= 1) {
+            nextRow = currentRow - 1
+            val nextPos = (nextRow to currentColumn)
+            map!![currentRow][currentColumn].second.leaveRoom()
+            map!![nextRow][currentColumn].second.enterRoom()
+            setCurrentPos(nextPos)
+            println("CURRENT POS: ${getCurrentPos()} MAP SIZE: ${map!!.size}")
+            printMap()
+        } else {
+            println("Can't go up...")
+            return
+        }
+    }
+
+    fun goDown() {
+        val currentPos = getCurrentPos()
+        val currentRow = currentPos!!.first
+        val currentColumn = currentPos.second
+        val nextRow: Int
+        if (currentRow < map!!.size - 1) {
+            nextRow = currentRow + 1
+            map!![currentRow][currentColumn].second.leaveRoom()
+            map!![nextRow][currentColumn].second.enterRoom()
+            val nextPos = (nextRow to currentColumn)
+            setCurrentPos(nextPos)
+            println("CURRENT POS: ${getCurrentPos()} MAP SIZE: ${map!!.size}")
+            printMap()
+        } else {
+            println("Can't go down...")
+            return
+        }
+    }
+
+    fun goLeft() {
+        val currentPos = getCurrentPos()
+        val currentRow = currentPos!!.first
+        val currentColumn = currentPos.second
+        val nextColumn: Int
+        if (currentColumn >= 1) {
+            nextColumn = currentColumn - 1
+            map!![currentRow][currentColumn].second.leaveRoom()
+            map!![currentRow][nextColumn].second.enterRoom()
+            val nextPos = (currentRow to nextColumn)
+            setCurrentPos(nextPos)
+            println("CURRENT POS: ${getCurrentPos()} MAP SIZE: ${map!!.size}")
+            printMap()
+        } else {
+            println("Can't go left...")
+            return
+        }
+    }
+
+    fun goRight() {
+        val currentPos = getCurrentPos()
+        val currentRow = currentPos!!.first
+        val currentColumn = currentPos.second
+        val nextColumn: Int
+        if (currentColumn < map!!.size - 1) {
+            nextColumn = currentColumn + 1
+            map!![currentRow][currentColumn].second.leaveRoom()
+            map!![currentRow][nextColumn].second.enterRoom()
+            val nextPos = (currentRow to nextColumn)
+            setCurrentPos(nextPos)
+            println("CURRENT POS: ${getCurrentPos()} MAP SIZE: ${map!!.size}")
+            printMap()
+        } else {
+            println("Can't go right...")
+            return
+        }
     }
 }

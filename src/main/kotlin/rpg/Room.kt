@@ -21,6 +21,10 @@ class Room(
         isHere = true
     }
 
+    fun leaveRoom() {
+        isHere = false
+    }
+
     fun isHere() = isHere
 
     fun isExit() = isExit
