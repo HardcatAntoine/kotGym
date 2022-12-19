@@ -14,7 +14,6 @@ class Room(
 
     fun openDoor() {
         RoomHelper.createRoom()
-        InputHelper.captureInput()
     }
 
     fun enterRoom() {

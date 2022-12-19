@@ -6,6 +6,5 @@ object RoomHelper {
     fun createRoom() {
         println("You are entered in the room...")
         roomInstance = Room()
-        InputHelper.captureInput()
     }
 }

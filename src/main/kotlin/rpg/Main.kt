@@ -6,8 +6,8 @@ import rpg.experimental.MatrixNavigator
 
 fun main() {
     println("Welcome! Do you want to start?")
-//    InputHelper.captureInput()
-    ExperimentalInputHelper.captureInput()
+    InputHelper.captureInput()
+ //   ExperimentalInputHelper.captureInput()
 
 
 //    MatrixNavigator.apply {
