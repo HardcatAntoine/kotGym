@@ -1,4 +1,4 @@
 package oop
 
-class Potion {
+class Potion: Item() {
 }

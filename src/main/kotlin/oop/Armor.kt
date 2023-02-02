@@ -1,5 +1,5 @@
 package oop
 
-class Armor {
+class Armor: Item() {
 
 }
